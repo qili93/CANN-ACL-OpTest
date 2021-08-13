@@ -39,7 +39,7 @@ int main() {
   auto x_buffer = aclCreateDataBuffer(x_device_ptr, x_size);
   // input - roi
   auto roi_desc = aclCreateTensorDesc(ACL_DT_UNDEFINED, 0, nullptr, ACL_FORMAT_UNDEFINED);
-  ACL_CALL(aclSetTensorPlaceMent(roi_desc, ACL_MEMTYPE_HOST));
+  // ACL_CALL(aclSetTensorPlaceMent(roi_desc, ACL_MEMTYPE_HOST));
   auto roi_buffer = aclCreateDataBuffer(nullptr, 0);
   // input - scales
   auto scales_desc = aclCreateTensorDesc(ACL_DT_UNDEFINED, 0, nullptr, ACL_FORMAT_UNDEFINED);
