@@ -1,0 +1,20 @@
+[EVENT] PROFILING(81932,ResizeD):2021-08-13-22:55:04.851.697 [msprof_callback_impl.cpp:151] >>> (tid:81932) Started to register profiling callbacks to acl
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.881.137 [log.cpp:148][TsdClient] enter into open process logicDeviceId[0] rankSize[0],[tsd_client.cpp:614:Open]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.881.156 [log.cpp:148][TsdClient] start process through tsdaemon, begin check aicpu opkernel,[tsd_client.cpp:627:Open]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.881.432 [log.cpp:148][TsdClient] logicDeviceId_=0 begin to init hdc client,[tsd_client.cpp:326:TsdClientInit]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.881.579 [log.cpp:148]VersionVerify: send client version to server,[version_verify.cpp:33:SetVersionInfo]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.881.586 [log.cpp:148]send feature_info:{msg_type:35, features:{check before send aicpu package,}},[version_verify.cpp:43:SetVersionInfo]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.881.992 [log.cpp:148]VersionVerify: Check client version info, server[1230], client[1230],[version_verify.cpp:59:PeerVersionCheck]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.882.002 [log.cpp:148]VersionVerify: pass client version info success,[version_verify.cpp:80:ParseVersionInfo]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.882.007 [log.cpp:148]Service[2] create hdc success,[hdc_client.cpp:406:CheckHdcConnection]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.882.013 [log.cpp:148]VersionVerify: msgType[35] not supported, please check and update you software,[version_verify.cpp:119:SpecialFeatureCheck]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.882.017 [log.cpp:148][TsdClient] Device not support search check_code before send aicpu package.,[tsd_client.cpp:1244:GetDeviceCheckCode]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.283 [log.cpp:148][TsdClient][logicDeviceId_=0] check aicpu opkernel success,[tsd_client.cpp:632:Open]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.292 [log.cpp:148][TsdClient] logicDeviceId_=0 begin to init hdc client,[tsd_client.cpp:326:TsdClientInit]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.426 [log.cpp:148]VersionVerify: send client version to server,[version_verify.cpp:33:SetVersionInfo]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.447 [log.cpp:148]send feature_info:{msg_type:35, features:{check before send aicpu package,}},[version_verify.cpp:43:SetVersionInfo]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.699 [log.cpp:148]VersionVerify: Check client version info, server[1230], client[1230],[version_verify.cpp:59:PeerVersionCheck]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.706 [log.cpp:148]VersionVerify: pass client version info success,[version_verify.cpp:80:ParseVersionInfo]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.711 [log.cpp:148]Service[2] create hdc success,[hdc_client.cpp:406:CheckHdcConnection]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.738 [log.cpp:148]VersionVerify: previous type[6], supported,[version_verify.cpp:105:SpecialFeatureCheck]81932
+[EVENT] TDT(81932,ResizeD):2021-08-13-22:55:04.915.750 [log.cpp:148][TsdClient][logicDeviceId_=0] [sessionId=1][rankSize=0]wait hccp and computer process start respond,[tsd_client.cpp:659:Open]81932

@@ -1,0 +1,6 @@
+# ignoree files
+.DS_Store
+.vscode
+# ignore dirs
+build/
+kernel_meta/
