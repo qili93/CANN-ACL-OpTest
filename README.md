@@ -2,9 +2,11 @@
 
 ## How to Run
 
-Pre-requisites: a server with Ascend910, refer to https://www.hiascend.com/document?tag=community-developer
+Pre-requisites: a server with Ascend910, refer to https://www.hiascend.com/software/cann/community
 
 1. Get runtime docker image
+
+  > Note: the installed CANN version in this image is '5.0.2.alpha005'.
 
   ```bash
   # x86_64 host
