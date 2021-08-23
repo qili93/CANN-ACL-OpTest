@@ -1,11 +1,15 @@
 #include <iostream>
 #include <vector>
 
-#include "acl/acl.h"
-#include "acl/acl_op_compiler.h"
-#include "common/logging.h"
+#include "common/nputensor.h"
 
-#define ACL_CALL(msg) CHECK_EQ(reinterpret_cast<aclError>(msg), ACL_SUCCESS)
+// [ERROR] GE(32344,BroadcastToD):2021-08-23-19:16:43.726.946 [/home/jenkins/agent/workspace/Compile_GraphEngine_Centos_X86/graphengine/ge/engine_manager/dnnengine_manager.cc:273]32344 GetDNNEngineName: ErrorNo: 1343242282(assign engine failed) [COMP][SUB_OPT][Check][OpSupported]Op type BroadcastToD of ops kernel AIcoreEngine is unsupported, reason : The reason why this op BroadcastToD is not supported by op information library[tbe-custom] is that op type BroadcastToD is not found.
+// The reason why this op BroadcastToD is not supported by op information library[tbe-builtin] is that [Dynamic check]: data type DT_INT64 of input [x] is not supported. All supported data type and format of tensor input0.x is:
+// Data Type: {}
+// Format:{}
+// [Static check]: data type DT_INT64 of input [x] is not supported. All supported data type and format of tensor input0.x is:
+// Data Type: {DT_FLOAT16,DT_FLOAT,DT_INT32,DT_INT8,DT_UINT8}
+// Format:{ND,ND,ND,ND,ND}
 
 int main() {
   // Init
@@ -22,39 +26,29 @@ int main() {
   const std::string op_type = "BroadcastToD";
   // input - x
   const std::vector<int64_t> x_dims{3, 1, 1};
-  const std::vector<float> x{1, 2, 3};
+  const std::vector<float>   x_data{1, 2, 3};
   // output - y
   const std::vector<int64_t> y_dims{3, 2, 4};
-  std::vector<float> y(24, 0.0);
   // attr - shape
   const std::vector<int64_t> shape{3, 2, 4};
 
-  // input0 - x - should use device buffer
-  auto x_desc = aclCreateTensorDesc(ACL_FLOAT, x_dims.size(), x_dims.data(), ACL_FORMAT_NCHW);
-  auto x_size = aclGetTensorDescSize(x_desc);
-  // allocate device mem and copy date to device
-  void* x_device_ptr = nullptr;
-  ACL_CALL(aclrtMalloc(&x_device_ptr, x_size, ACL_MEM_MALLOC_NORMAL_ONLY));
-  ACL_CALL(aclrtMemcpy(x_device_ptr, x_size, x.data(), x_size, ACL_MEMCPY_HOST_TO_DEVICE));
-  auto x_device_buffer = aclCreateDataBuffer(x_device_ptr, x_size);
+  // input - value
+  auto input_x = new npuTensor<float>(ACL_FLOAT, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data(), memType::DEVICE);
+
   // set inputs desc and buffer
   std::vector<aclTensorDesc *> input_descs;
   std::vector<aclDataBuffer *> input_buffers;
-  input_descs.emplace_back(x_desc);
-  input_buffers.emplace_back(x_device_buffer);
+  input_descs.emplace_back(input_x->desc);
+  input_buffers.emplace_back(input_x->buffer);
 
-  // output0 - y - should use device buffer
-  auto y_desc = aclCreateTensorDesc(ACL_FLOAT, y_dims.size(), y_dims.data(), ACL_FORMAT_NCHW);
-  auto y_size = aclGetTensorDescSize(y_desc);
-  // allocate device mem
-  void* y_device_ptr = nullptr;
-  ACL_CALL(aclrtMalloc(&y_device_ptr, y_size, ACL_MEM_MALLOC_NORMAL_ONLY));
-  auto y_device_buffer = aclCreateDataBuffer(y_device_ptr, y_size);
+  // output - out
+  auto output_y = new npuTensor<float>(ACL_FLOAT, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
+
   // set output desc and buffer
   std::vector<aclTensorDesc *> output_descs;
   std::vector<aclDataBuffer *> output_buffers;
-  output_descs.emplace_back(y_desc);
-  output_buffers.emplace_back(y_device_buffer);
+  output_descs.emplace_back(output_y->desc);
+  output_buffers.emplace_back(output_y->buffer);
   
   // attr - shape
   auto attr = aclopCreateAttr();
@@ -74,23 +68,14 @@ int main() {
   ACL_CALL(aclrtSynchronizeStream(stream));
   ACL_CALL(aclrtDestroyStream(stream));
 
-  // copy output from device to host
-  ACL_CALL(aclrtMemcpy(y.data(), y_size, y_device_ptr, y_size, ACL_MEMCPY_DEVICE_TO_HOST));
-
   // print output
-  std::cout << "y = [";
-  for (size_t i = 0; i < y.size(); ++i) {
-    std::cout << y[i] << ", ";
-  }
-  std::cout << "]" << std::endl;
+  output_y->Print("y");
 
   // destroy
-  ACL_CALL(aclDestroyDataBuffer(x_device_buffer));
-  ACL_CALL(aclDestroyDataBuffer(y_device_buffer));
-  ACL_CALL(aclrtFree(x_device_ptr));
-  ACL_CALL(aclrtFree(y_device_ptr));
-  aclDestroyTensorDesc(x_desc);
-  aclDestroyTensorDesc(y_desc);
+  input_x->Destroy();
+  output_y->Destroy();
+
+  // destrpy - attr
   aclopDestroyAttr(attr);
 
   // release

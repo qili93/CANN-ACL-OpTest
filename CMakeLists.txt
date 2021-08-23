@@ -15,7 +15,7 @@ else()
 endif()
 
 # 2.  Add compile options
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
