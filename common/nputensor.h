@@ -36,6 +36,7 @@ class npuTensor {
         ACL_CALL(aclrtMemcpy(host_ptr, size, ptr, size, ACL_MEMCPY_HOST_TO_HOST));
       }
       buffer =  aclCreateDataBuffer(host_ptr, size);
+      // ACL_CALL(aclSetTensorConst(desc, buffer, size));
     }
   }
 
@@ -68,3 +69,7 @@ public:
   aclTensorDesc* desc;
   aclDataBuffer* buffer;
 };
+
+static int64_t get_numel(const std::vector<int64_t>& dims) {
+  return std::accumulate(dims.begin(), dims.end(), 1, std::multiplies<int64_t>());
+}

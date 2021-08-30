@@ -5,6 +5,7 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include <numeric>
 
 #define LOG(status) LOG_##status.stream()
 #define LOG_INFO LogMessage(__FILE__, __FUNCTION__, __LINE__, "I")

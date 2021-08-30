@@ -18,6 +18,7 @@ TARGET_EXE=${1:-Add}
 # TARGET_EXE=BNTrainingReduce
 # TARGET_EXE=BNTrainingUpdate
 # TARGET_EXE=FillV2D
+# TARGET_EXE=DeformableOffsets
 
 echo "----------- buiding target : ${TARGET_EXE} --------------"
 

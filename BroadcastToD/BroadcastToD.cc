@@ -32,7 +32,7 @@ int main() {
   // attr - shape
   const std::vector<int64_t> shape{3, 2, 4};
 
-  // input - value
+  // input - x
   auto input_x = new npuTensor<float>(ACL_FLOAT, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data(), memType::DEVICE);
 
   // set inputs desc and buffer

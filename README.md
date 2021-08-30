@@ -46,4 +46,5 @@ Pre-requisites: a server with Ascend910, refer to https://www.hiascend.com/softw
 
   - https://gitee.com/ascend/modelzoo/issues/I44MV8?from=project-issue # Resize
   - https://gitee.com/ascend/modelzoo/issues/I44RAL?from=project-issue # ResizeD
+  - https://gitee.com/ascend/modelzoo/issues/I47UIG?from=project-issue # npu_deformable_conv2d
 
