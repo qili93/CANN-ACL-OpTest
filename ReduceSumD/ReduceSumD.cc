@@ -25,7 +25,7 @@ int main() {
   const bool keep_dims = false;
   const std::vector<int64_t> axes = {1};
   // output - y
-  const std::vector<int64_t> y_dims{3, 2, 3, 2};
+  const std::vector<int64_t> y_dims{3, 1, 3, 2};
 
   // input - x
   auto x1 = new npuTensor<float>(ACL_FLOAT, x1_dims.size(), x1_dims.data(), ACL_FORMAT_NCHW, x1_data.data());
