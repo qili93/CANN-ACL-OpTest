@@ -15,10 +15,10 @@ int main() {
   std::cout << "aclrtRunMode is : " << run_mode_str << std::endl;
 
   // op type
-  const std::string op_type = "BroadcastTo";
+  const std::string op_type = "Expand";
   // input - x
-  const std::vector<int64_t> x_dims{3, 1};
-  std::vector<int64_t> x_data(3 * 1);
+  const std::vector<int64_t> x_dims{3, 2};
+  std::vector<float> x_data(3 * 2);
   std::iota(x_data.begin(), x_data.end(), 0);
   // input - sizes
   const std::vector<int64_t> sizes_dims{2};
@@ -27,7 +27,7 @@ int main() {
   const std::vector<int64_t> y_dims{3, 4};
 
   // inputs
-  auto input_x = new npuTensor<int64_t>(ACL_INT64, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data(), memType::DEVICE);
+  auto input_x = new npuTensor<float>(ACL_FLOAT, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data());
   auto input_sizes = new npuTensor<int64_t>(ACL_INT64, sizes_dims.size(), sizes_dims.data(), ACL_FORMAT_ND, sizes_data.data(), memType::HOST);
   // set inputs desc and buffer
   std::vector<aclTensorDesc *> input_descs;
@@ -38,7 +38,7 @@ int main() {
   input_buffers.emplace_back(input_sizes->buffer);
 
   // output
-  auto output_y = new npuTensor<int64_t>(ACL_INT64, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
+  auto output_y = new npuTensor<float>(ACL_FLOAT, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
   // set output desc and buffer
   std::vector<aclTensorDesc *> output_descs;
   std::vector<aclDataBuffer *> output_buffers;

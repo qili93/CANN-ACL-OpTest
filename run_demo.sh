@@ -20,8 +20,14 @@ TARGET_EXE=${1:-Add}
 # TARGET_EXE=FillV2D
 # TARGET_EXE=DeformableOffsets
 # TARGET_EXE=BatchMatMul
-TARGET_EXE=ReduceSumD
+# TARGET_EXE=ReduceSumD
 # TARGET_EXE=ReduceSum
+# TARGET_EXE=Expand
+# TARGET_EXE=StridedSliceAssign
+# TARGET_EXE=StridedSliceAssignD
+# TARGET_EXE=MaskedScatter
+# TARGET_EXE=TileWithAxis
+TARGET_EXE=ScatterUpdate
 
 echo "----------- buiding target : ${TARGET_EXE} --------------"
 

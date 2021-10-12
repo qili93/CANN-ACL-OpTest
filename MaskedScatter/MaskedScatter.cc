@@ -15,30 +15,38 @@ int main() {
   std::cout << "aclrtRunMode is : " << run_mode_str << std::endl;
 
   // op type
-  const std::string op_type = "BroadcastTo";
+  const std::string op_type = "MaskedScatter";
   // input - x
-  const std::vector<int64_t> x_dims{3, 1};
-  std::vector<int64_t> x_data(3 * 1);
-  std::iota(x_data.begin(), x_data.end(), 0);
-  // input - sizes
-  const std::vector<int64_t> sizes_dims{2};
-  const std::vector<int64_t> sizes_data{3, 4};
+  const std::vector<int64_t> x_dims{5};
+  const std::vector<float> x_data(5, 1);
+  // input - mask
+  const std::vector<int64_t> mask_dims{5};
+  bool mask_data[5] = {false};
+  mask_data[0] = true;
+  mask_data[1] = true;
+  // input - value
+  const std::vector<int64_t> value_dims{5};
+  const std::vector<float> value_data{2, 3, 0, 0, 0};
   // output
-  const std::vector<int64_t> y_dims{3, 4};
+  const std::vector<int64_t> y_dims{5};
 
   // inputs
-  auto input_x = new npuTensor<int64_t>(ACL_INT64, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data(), memType::DEVICE);
-  auto input_sizes = new npuTensor<int64_t>(ACL_INT64, sizes_dims.size(), sizes_dims.data(), ACL_FORMAT_ND, sizes_data.data(), memType::HOST);
+  auto input_x = new npuTensor<float>(ACL_FLOAT, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data());
+  auto input_mask = new npuTensor<bool>(ACL_BOOL, mask_dims.size(), mask_dims.data(), ACL_FORMAT_ND, mask_data);
+  auto input_value = new npuTensor<float>(ACL_FLOAT, value_dims.size(), value_dims.data(), ACL_FORMAT_ND, value_data.data());
+
   // set inputs desc and buffer
   std::vector<aclTensorDesc *> input_descs;
   std::vector<aclDataBuffer *> input_buffers;
   input_descs.emplace_back(input_x->desc);
-  input_descs.emplace_back(input_sizes->desc);
+  input_descs.emplace_back(input_mask->desc);
+  input_descs.emplace_back(input_value->desc);
   input_buffers.emplace_back(input_x->buffer);
-  input_buffers.emplace_back(input_sizes->buffer);
+  input_buffers.emplace_back(input_mask->buffer);
+  input_buffers.emplace_back(input_value->buffer);
 
   // output
-  auto output_y = new npuTensor<int64_t>(ACL_INT64, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
+  auto output_y = new npuTensor<float>(ACL_FLOAT, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
   // set output desc and buffer
   std::vector<aclTensorDesc *> output_descs;
   std::vector<aclDataBuffer *> output_buffers;
@@ -67,7 +75,8 @@ int main() {
 
   // destroy
   input_x->Destroy();
-  input_sizes->Destroy();
+  input_mask->Destroy();
+  input_value->Destroy();
   output_y->Destroy();
 
   aclopDestroyAttr(attr);

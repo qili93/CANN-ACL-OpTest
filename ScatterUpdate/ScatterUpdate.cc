@@ -15,30 +15,34 @@ int main() {
   std::cout << "aclrtRunMode is : " << run_mode_str << std::endl;
 
   // op type
-  const std::string op_type = "BroadcastTo";
-  // input - x
-  const std::vector<int64_t> x_dims{3, 1};
-  std::vector<int64_t> x_data(3 * 1);
-  std::iota(x_data.begin(), x_data.end(), 0);
-  // input - sizes
-  const std::vector<int64_t> sizes_dims{2};
-  const std::vector<int64_t> sizes_data{3, 4};
+  const std::string op_type = "ScatterUpdate";
+  // input - var
+  const std::vector<int64_t> var_dims{24};
+  std::vector<float> var_data(24, 1);
+  // input - value
+  const std::vector<int64_t> indices_dims{12};
+  std::vector<int64_t> indices_data{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  // input - value
+  const std::vector<int64_t> updates_dims{12};
+  std::vector<float> updates_data(12, 6);
   // output
-  const std::vector<int64_t> y_dims{3, 4};
+  const std::vector<int64_t> y_dims{24};
 
   // inputs
-  auto input_x = new npuTensor<int64_t>(ACL_INT64, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data(), memType::DEVICE);
-  auto input_sizes = new npuTensor<int64_t>(ACL_INT64, sizes_dims.size(), sizes_dims.data(), ACL_FORMAT_ND, sizes_data.data(), memType::HOST);
-  // set inputs desc and buffer
+  auto input_var = new npuTensor<float>(ACL_FLOAT, var_dims.size(), var_dims.data(), ACL_FORMAT_ND, var_data.data());
+  auto input_indices = new npuTensor<int64_t>(ACL_INT64, indices_dims.size(), indices_dims.data(), ACL_FORMAT_ND, indices_data.data());
+  auto input_updates = new npuTensor<float>(ACL_FLOAT, updates_dims.size(), updates_dims.data(), ACL_FORMAT_ND, updates_data.data());
   std::vector<aclTensorDesc *> input_descs;
   std::vector<aclDataBuffer *> input_buffers;
-  input_descs.emplace_back(input_x->desc);
-  input_descs.emplace_back(input_sizes->desc);
-  input_buffers.emplace_back(input_x->buffer);
-  input_buffers.emplace_back(input_sizes->buffer);
+  input_descs.emplace_back(input_var->desc);
+  input_descs.emplace_back(input_indices->desc);
+  input_descs.emplace_back(input_updates->desc);
+  input_buffers.emplace_back(input_var->buffer);
+  input_buffers.emplace_back(input_indices->buffer);
+  input_buffers.emplace_back(input_updates->buffer);
 
   // output
-  auto output_y = new npuTensor<int64_t>(ACL_INT64, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
+  auto output_y = new npuTensor<float>(ACL_FLOAT, y_dims.size(), y_dims.data(), ACL_FORMAT_ND, nullptr);
   // set output desc and buffer
   std::vector<aclTensorDesc *> output_descs;
   std::vector<aclDataBuffer *> output_buffers;
@@ -47,6 +51,7 @@ int main() {
   
   // attributes
   auto attr = aclopCreateAttr();
+  ACL_CALL(aclopSetAttrBool(attr, "use_locking", false));
 
   // create stream
   aclrtStream stream = nullptr;
@@ -66,8 +71,9 @@ int main() {
   output_y->Print("y");
 
   // destroy
-  input_x->Destroy();
-  input_sizes->Destroy();
+  input_var->Destroy();
+  input_indices->Destroy();
+  input_updates->Destroy();
   output_y->Destroy();
 
   aclopDestroyAttr(attr);
