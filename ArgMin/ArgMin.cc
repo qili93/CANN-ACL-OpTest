@@ -15,7 +15,7 @@ int main() {
   std::cout << "aclrtRunMode is : " << run_mode_str << std::endl;
 
   // op type
-  const std::string op_type = "ArgMaxV2";
+  const std::string op_type = "ArgMin";
   // input - x
   const std::vector<int64_t> x_dims{2, 3, 4};
   std::vector<float> x_data(24);
@@ -26,7 +26,7 @@ int main() {
   // output - y
   std::vector<int64_t> y_dims{2, 4};
   // attr - shape
-  // const bool keep_dims = false;
+  const bool keep_dims = false;
 
   // inputs
   auto input_x = new npuTensor<float>(ACL_FLOAT, x_dims.size(), x_dims.data(), ACL_FORMAT_ND, x_data.data());
@@ -49,9 +49,8 @@ int main() {
   
   // attr
   auto attr = aclopCreateAttr();
-  // ACL_CALL(aclopSetAttrInt(attr, "dtype", 9)); // not work
-  // ACL_CALL(aclopSetAttrDataType(attr, "dtype", 9)); // not work
-  ACL_CALL(aclopSetAttrDataType(attr, "dtype", ACL_INT64));
+  ACL_CALL(aclopSetAttrInt(attr, "dtype", 9));
+  // ACL_CALL(aclopSetAttrDataType(attr, "dtype", ACL_INT64));
 
   // create stream
   aclrtStream stream = nullptr;

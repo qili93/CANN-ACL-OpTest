@@ -20,6 +20,7 @@ class npuTensor {
     size = aclGetTensorDescSize(desc);
     device_ptr = nullptr;
     host_ptr = nullptr;
+    mem_type_ = mem_type;
 
     if (mem_type == memType::DEVICE) {
       ACL_CALL(aclrtMalloc(&device_ptr, size, ACL_MEM_MALLOC_NORMAL_ONLY));
@@ -55,7 +56,11 @@ class npuTensor {
   void Print(std::string msg) {
     size_t numel = size / sizeof(T);
     std::vector<T> cpu_data(numel, 0);
-    ACL_CALL(aclrtMemcpy(cpu_data.data(), size, device_ptr, size, ACL_MEMCPY_DEVICE_TO_HOST));
+    if (mem_type_ == memType::DEVICE) {
+      ACL_CALL(aclrtMemcpy(cpu_data.data(), size, device_ptr, size, ACL_MEMCPY_DEVICE_TO_HOST));
+    } else {
+      ACL_CALL(aclrtMemcpy(cpu_data.data(), size, host_ptr, size, ACL_MEMCPY_HOST_TO_HOST));
+    }
     std::cout << msg << " = [";
     for (size_t i = 0; i < cpu_data.size(); ++i) {
       std::cout << cpu_data[i] << ", ";
@@ -68,6 +73,7 @@ public:
   void * device_ptr;
   aclTensorDesc* desc;
   aclDataBuffer* buffer;
+  memType mem_type_;
 };
 
 static int64_t get_numel(const std::vector<int64_t>& dims) {
