@@ -14,7 +14,7 @@ TARGET_EXE=${1:-Add}
 # TARGET_EXE=BroadcastTo
 # TARGET_EXE=BroadcastToD
 # TARGET_EXE=BinaryCrossEntropy
-TARGET_EXE=ArgMaxV2
+# TARGET_EXE=ArgMaxV2
 # TARGET_EXE=ArgMin
 # TARGET_EXE=BNTrainingReduce
 # TARGET_EXE=BNTrainingUpdate
@@ -30,6 +30,7 @@ TARGET_EXE=ArgMaxV2
 # TARGET_EXE=TileWithAxis
 # TARGET_EXE=ScatterUpdate
 # TARGET_EXE=Tile
+TARGET_EXE=Sort
 
 echo "----------- buiding target : ${TARGET_EXE} --------------"
 
