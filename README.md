@@ -45,7 +45,8 @@ Pre-requisites: a server with Ascend910, refer to https://www.hiascend.com/softw
 4. Tracking issues here (i.e. issue links to Ascend community)
 
   - https://gitee.com/ascend/modelzoo/issues/I44MV8?from=project-issue # Resize
-  - https://gitee.com/ascend/modelzoo/issues/I44RAL?from=project-issue # ResizeD
   - https://gitee.com/ascend/modelzoo/issues/I47UIG?from=project-issue # npu_deformable_conv2d
-  - https://gitee.com/ascend/modelzoo/issues/I4ENI7?from=project-issue # Sort output error
+  - https://gitee.com/ascend/modelzoo/issues/I4ENI7?from=project-issue # Sort output mismatch
+  - https://gitee.com/ascend/modelzoo/issues/I4EO3N?from=project-issue # Sort error in INT64
+  - https://gitee.com/ascend/modelzoo/issues/I4DKLV?from=project-issue # Fill error on CANN 5.0.3
 
