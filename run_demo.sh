@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# usage: sh run_demo.sh <OP Name>
+# for example: 
+#   sh run_demo.sh Add
+#   sh run_demo.sh Sort
+
 TARGET_EXE=${1:-Add}
 
 # update TARGET_EXE for the operator
@@ -30,7 +35,7 @@ TARGET_EXE=${1:-Add}
 # TARGET_EXE=TileWithAxis
 # TARGET_EXE=ScatterUpdate
 # TARGET_EXE=Tile
-TARGET_EXE=Sort
+# TARGET_EXE=Sort
 
 echo "----------- buiding target : ${TARGET_EXE} --------------"
 
