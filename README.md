@@ -10,33 +10,29 @@ Pre-requisites: a server with Ascend910, refer to https://www.hiascend.com/softw
 
   ```bash
   # x86_64 host
-  docker pull qili93/develop:latest-dev-cann5.0.2.alpha005-gcc82-x86_64
+  docker pull registry.baidubce.com/device/paddle-npu:cann512-x86_64-gcc75
 
   # aarch64 host
-  docker pull qili93/develop:latest-dev-cann5.0.2.alpha005-gcc82-aarch64
+  docker pull registry.baidubce.com/device/paddle-npu:cann512-aarch64-gcc75
   ```
 
 2. Start docker container
 
   ```bash
-  docker run -it --name qili93-dev-npu -v /home/<username>:/workspace \
-             --pids-limit 409600 --network=host --shm-size=128G \
-             --cap-add=SYS_PTRACE --security-opt seccomp=unconfined \
-             --device=/dev/davinci2 \ # Note: change this if need to mapping other device ID
-             --device=/dev/davinci_manager \
-             --device=/dev/devmm_svm \
-             --device=/dev/hisi_hdc \
-             -v /usr/local/Ascend/driver:/usr/local/Ascend/driver \
-             -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
-             -v /usr/local/dcmi:/usr/local/dcmi \
-             qili93/develop:latest-dev-cann5.0.2.alpha005-gcc82-x86_64 /bin/bash
+  docker run -it --name cann512 -v `pwd`:/workspace --workdir=/workspace \
+        --pids-limit 409600 -v /home/datasets:/datasets \
+        --privileged --network=host --shm-size=128G \
+        -v /usr/local/Ascend/driver:/usr/local/Ascend/driver \
+        -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
+        -v /usr/local/dcmi:/usr/local/dcmi \
+        registry.baidubce.com/device/paddle-npu:cann512-x86_64-gcc82 /bin/bash
   ```
 
 3. Compile and run by `run_demo.sh`, for example:
 
   ```bash
-  # Run Add OP
-  sh run_demo.sh Add
+  # Run FillV2 OP
+  sh run_demo.sh FillV2
 
   # Run ResizeNearestNeighborV2 OP
   sh run_demo.sh ResizeNearestNeighborV2

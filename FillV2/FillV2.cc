@@ -45,15 +45,9 @@ int main() {
   output_descs.emplace_back(output->desc);
   output_buffers.emplace_back(output->buffer);
 
-  // Note: need to change data type first
-  // int64_t input_value = static_cast<int64_t>(value);
-
-  // std::cout << "input_value = " << input_value << std::endl;
-
   // attr
   auto attr = aclopCreateAttr();
   ACL_CALL(aclopSetAttrFloat(attr, "value", value));
-  // ACL_CALL(aclopSetAttrListInt(attr, "dims", output_dims.size(), output_dims.data()));
   
   // create stream
   aclrtStream stream = nullptr;
