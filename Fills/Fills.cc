@@ -18,31 +18,26 @@ int main() {
   std::cout << "aclrtRunMode is : " << run_mode_str << std::endl;
 
   // op type
-  const std::string op_type = "Fill";
-  // input 0 - dims
-  const std::vector<int64_t> input_0_dims{1};
-  const std::vector<int64_t> input_0_data{1};
-  // input 1 - value
-  const std::vector<int64_t> input_1_dims{1};
-  const std::vector<int64_t> input_1_data{1};
-  // output - y
-  const std::vector<int64_t> output_dims{1};
+  const std::string op_type = "Fills";
+  // input - dims
+  const std::vector<int64_t> input_dims{32, 32};
+  const std::vector<int64_t> input_data(1024, 1);
+  // output
+  const std::vector<int64_t> output_dims{32, 32};
+  // attr
+  const float value = 3.0;
 
-  // input tensor 0 - dims
-  auto input_0 = new npuTensor<int64_t>(ACL_INT64, input_0_dims.size(), input_0_dims.data(), ACL_FORMAT_NCHW, input_0_data.data(), memType::HOST);
-  // input tensor 1 - value
-  auto input_1 = new npuTensor<int64_t>(ACL_INT64, input_1_dims.size(), input_1_dims.data(), ACL_FORMAT_NCHW, input_1_data.data(), memType::DEVICE);
+  // input - dims
+  auto input = new npuTensor<int64_t>(ACL_INT64, input_dims.size(), input_dims.data(), ACL_FORMAT_ND, input_data.data(), memType::HOST);
 
   // set inputs desc and buffer
   std::vector<aclTensorDesc *> input_descs;
   std::vector<aclDataBuffer *> input_buffers;
-  input_descs.emplace_back(input_0->desc);
-  input_descs.emplace_back(input_1->desc);
-  input_buffers.emplace_back(input_0->buffer);
-  input_buffers.emplace_back(input_1->buffer);
+  input_descs.emplace_back(input->desc);
+  input_buffers.emplace_back(input->buffer);
 
   // output - out
-  auto output = new npuTensor<int64_t>(ACL_INT64, output_dims.size(), output_dims.data(), ACL_FORMAT_NCHW, nullptr);
+  auto output = new npuTensor<float>(ACL_FLOAT, output_dims.size(), output_dims.data(), ACL_FORMAT_ND, nullptr);
 
   // set output desc and buffer
   std::vector<aclTensorDesc *> output_descs;
@@ -52,7 +47,7 @@ int main() {
 
   // attr
   auto attr = aclopCreateAttr();
-  // ACL_CALL(aclopSetAttrFloat(attr, "value", value));
+  ACL_CALL(aclopSetAttrFloat(attr, "value", value));
   
   // create stream
   aclrtStream stream = nullptr;
@@ -72,8 +67,7 @@ int main() {
   output->Print("y");
 
   // destroy - outputs
-  input_0->Destroy();
-  input_1->Destroy();
+  input->Destroy();
   output->Destroy();
 
   aclopDestroyAttr(attr);
