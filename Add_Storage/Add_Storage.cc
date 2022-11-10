@@ -36,8 +36,11 @@ int main() {
 
   // input - x
   auto x_desc = aclCreateTensorDesc(ACL_FLOAT, x_origin_dims.size(), x_origin_dims.data(), origin_format);
+
   ACL_CALL(aclSetTensorFormat(x_desc, storage_format));
   ACL_CALL(aclSetTensorShape(x_desc, x_storage_dims.size(), x_storage_dims.data()));
+  ACL_CALL(aclSetTensorOriginFormat(x_desc, origin_format));
+  ACL_CALL(aclSetTensorOriginShape(x_desc, x_origin_dims.size(), x_origin_dims.data()));
   auto x_size = aclGetTensorDescSize(x_desc);
   std::cout << "x_size = " << x_size << std::endl;
   void* x_device_ptr;
@@ -49,6 +52,8 @@ int main() {
   auto y_desc = aclCreateTensorDesc(ACL_FLOAT, y_origin_dims.size(), y_origin_dims.data(), origin_format);
   ACL_CALL(aclSetTensorFormat(y_desc, storage_format));
   ACL_CALL(aclSetTensorShape(y_desc, y_storage_dims.size(), y_storage_dims.data()));
+  ACL_CALL(aclSetTensorOriginFormat(y_desc, origin_format));
+  ACL_CALL(aclSetTensorOriginShape(y_desc, y_origin_dims.size(), y_origin_dims.data()));
   auto y_size = aclGetTensorDescSize(y_desc);
   std::cout << "y_size = " << y_size << std::endl;
   void* y_device_ptr;
@@ -69,6 +74,8 @@ int main() {
   auto out_desc = aclCreateTensorDesc(ACL_FLOAT, x_origin_dims.size(), x_origin_dims.data(), origin_format);
   ACL_CALL(aclSetTensorFormat(out_desc, storage_format));
   ACL_CALL(aclSetTensorShape(out_desc, x_storage_dims.size(), x_storage_dims.data()));
+  ACL_CALL(aclSetTensorOriginFormat(out_desc, origin_format));
+  ACL_CALL(aclSetTensorOriginShape(out_desc, x_origin_dims.size(), x_origin_dims.data()));
   auto out_size = aclGetTensorDescSize(out_desc);
   std::cout << "out_size = " << out_size << std::endl;
   void* out_device_ptr;
