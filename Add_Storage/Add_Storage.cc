@@ -25,7 +25,7 @@ int main() {
   const std::vector<float> x_data(64*16, 1);
 
   // input - y
-  const std::vector<int64_t> y_origin_dims{6};
+  const std::vector<int64_t> y_origin_dims{1, 6, 1, 1};
   const std::vector<int64_t> y_storage_dims{1, 1, 1, 1, 16};
   const std::vector<float> y_data(16, 1);
 
