@@ -5,6 +5,8 @@
 #include "acl/acl_op_compiler.h"
 #include "common/logging.h"
 
+#include <numeric>
+
 #define ACL_CALL(msg) CHECK_EQ(reinterpret_cast<aclError>(msg), ACL_SUCCESS)
 
 int main() {
@@ -41,12 +43,13 @@ int main() {
   ACL_CALL(aclSetTensorShape(x_desc, x_storage_dims.size(), x_storage_dims.data()));
   ACL_CALL(aclSetTensorOriginFormat(x_desc, origin_format));
   ACL_CALL(aclSetTensorOriginShape(x_desc, x_origin_dims.size(), x_origin_dims.data()));
-  auto x_size = aclGetTensorDescSize(x_desc);
+  auto x_size = std::accumulate(x_storage_dims.begin(), x_storage_dims.end(), 1, std::multiplies<int64_t>()) * 4;//aclGetTensorDescSize(x_desc);
   std::cout << "x_size = " << x_size << std::endl;
   void* x_device_ptr;
   ACL_CALL(aclrtMalloc(&x_device_ptr, x_size, ACL_MEM_MALLOC_NORMAL_ONLY));
   ACL_CALL(aclrtMemcpy(x_device_ptr, x_size, x_data.data(), x_size, ACL_MEMCPY_HOST_TO_DEVICE));
   auto x_buffer = aclCreateDataBuffer(x_device_ptr, x_size);
+
 
   // input - x
   auto y_desc = aclCreateTensorDesc(ACL_FLOAT, y_origin_dims.size(), y_origin_dims.data(), origin_format);
@@ -54,7 +57,7 @@ int main() {
   ACL_CALL(aclSetTensorShape(y_desc, y_storage_dims.size(), y_storage_dims.data()));
   ACL_CALL(aclSetTensorOriginFormat(y_desc, origin_format));
   ACL_CALL(aclSetTensorOriginShape(y_desc, y_origin_dims.size(), y_origin_dims.data()));
-  auto y_size = aclGetTensorDescSize(y_desc);
+  auto y_size = std::accumulate(y_storage_dims.begin(), y_storage_dims.end(), 1, std::multiplies<int64_t>()) * 4;//aclGetTensorDescSize(y_desc);
   std::cout << "y_size = " << y_size << std::endl;
   void* y_device_ptr;
   ACL_CALL(aclrtMalloc(&y_device_ptr, y_size, ACL_MEM_MALLOC_NORMAL_ONLY));
@@ -76,7 +79,7 @@ int main() {
   ACL_CALL(aclSetTensorShape(out_desc, x_storage_dims.size(), x_storage_dims.data()));
   ACL_CALL(aclSetTensorOriginFormat(out_desc, origin_format));
   ACL_CALL(aclSetTensorOriginShape(out_desc, x_origin_dims.size(), x_origin_dims.data()));
-  auto out_size = aclGetTensorDescSize(out_desc);
+  auto out_size = std::accumulate(x_storage_dims.begin(), x_storage_dims.end(), 1, std::multiplies<int64_t>()) * 4;//aclGetTensorDescSize(out_desc);
   std::cout << "out_size = " << out_size << std::endl;
   void* out_device_ptr;
   ACL_CALL(aclrtMalloc(&out_device_ptr, out_size, ACL_MEM_MALLOC_NORMAL_ONLY));
