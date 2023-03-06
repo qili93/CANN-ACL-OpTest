@@ -3,6 +3,10 @@
 
 #include "common/nputensor.h"
 
+static int64_t get_numel(const std::vector<int64_t>& dims) {
+  return std::accumulate(dims.begin(), dims.end(), 1, std::multiplies<int64_t>());
+}
+
 int main() {
   // Init
   ACL_CALL(aclInit(nullptr));
