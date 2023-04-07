@@ -36,6 +36,7 @@ TARGET_EXE=${1:-Add}
 # TARGET_EXE=ScatterUpdate
 # TARGET_EXE=Tile
 # TARGET_EXE=Sort
+TARGET_EXE=Histogramfixedwidth
 
 echo "----------- buiding target : ${TARGET_EXE} --------------"
 
